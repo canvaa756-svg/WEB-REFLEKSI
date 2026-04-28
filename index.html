@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AR RefleksiMaster 3D - Semua Objek Tampil Sempurna</title>
+    <title>AR RefleksiMaster 3D - Sidebar Minimizable | Objek Selalu Terlihat</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -14,46 +14,88 @@
         #three-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; display: block; }
         .ui-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
         .ui-overlay * { pointer-events: auto; }
-        .glass-header { position: absolute; top: 16px; left: 16px; right: 16px; background: rgba(15, 25, 45, 0.85); backdrop-filter: blur(12px); padding: 10px 24px; text-align: center; border-radius: 28px; border-bottom: 1px solid rgba(16, 185, 129, 0.5); z-index: 10; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .glass-header h1 { font-weight: 700; font-size: 1.4rem; background: linear-gradient(135deg, #E0F2FE, #10b981); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.3px; }
+        
+        /* Header tetap di atas */
+        .glass-header { position: absolute; top: 16px; left: 16px; right: 16px; background: rgba(15, 25, 45, 0.85); backdrop-filter: blur(12px); padding: 10px 24px; text-align: center; border-radius: 28px; border-bottom: 1px solid rgba(16, 185, 129, 0.5); z-index: 20; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .glass-header h1 { font-weight: 700; font-size: 1.2rem; background: linear-gradient(135deg, #E0F2FE, #10b981); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.3px; }
         .glass-header h1 i { background: none; color: #10b981; margin-right: 8px; }
-        .glass-header p { font-size: 0.7rem; color: #94a3b8; margin-top: 4px; }
-        .ar-badge { position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); padding: 6px 14px; border-radius: 40px; font-size: 0.7rem; font-weight: 600; color: #10b981; border: 1px solid #10b981; z-index: 10; display: flex; align-items: center; gap: 6px; }
-        .control-sidebar { position: absolute; right: 16px; top: 90px; bottom: 16px; width: 380px; background: rgba(15, 25, 45, 0.85); backdrop-filter: blur(16px); border-radius: 28px; border-left: 1px solid rgba(16,185,129,0.3); overflow-y: auto; padding: 16px 14px; display: flex; flex-direction: column; gap: 14px; z-index: 10; box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
-        .card-modern { background: rgba(10, 18, 28, 0.7); border-radius: 20px; padding: 14px; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.05); }
-        .card-modern h3 { font-size: 0.85rem; font-weight: 600; color: #10b981; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-left: 3px solid #10b981; padding-left: 10px; }
-        .shape-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
-        .pill-btn { background: rgba(30, 41, 59, 0.9); border: none; color: #e2e8f0; padding: 6px 12px; border-radius: 40px; font-size: 0.7rem; font-weight: 500; cursor: pointer; transition: 0.15s; display: inline-flex; align-items: center; gap: 6px; }
-        .pill-btn i { font-size: 0.7rem; }
+        .glass-header p { font-size: 0.6rem; color: #94a3b8; margin-top: 4px; }
+        
+        .ar-badge { position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); padding: 6px 14px; border-radius: 40px; font-size: 0.7rem; font-weight: 600; color: #10b981; border: 1px solid #10b981; z-index: 20; display: flex; align-items: center; gap: 6px; }
+        
+        /* Toggle button untuk sidebar */
+        .toggle-sidebar-btn { position: absolute; right: 16px; top: 90px; background: #10b981; border: none; color: white; width: 44px; height: 44px; border-radius: 30px; font-size: 1.2rem; cursor: pointer; z-index: 25; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .toggle-sidebar-btn:hover { background: #059669; transform: scale(1.05); }
+        
+        /* Sidebar - dapat disembunyikan */
+        .control-sidebar { 
+            position: absolute; 
+            right: 16px; 
+            top: 90px; 
+            bottom: 16px; 
+            width: 380px; 
+            max-width: calc(100% - 32px);
+            background: rgba(15, 25, 45, 0.92); 
+            backdrop-filter: blur(20px); 
+            border-radius: 28px; 
+            border-left: 1px solid rgba(16,185,129,0.3); 
+            overflow-y: auto; 
+            padding: 16px 14px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            z-index: 15; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .control-sidebar.collapsed {
+            transform: translateX(calc(100% + 20px));
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Scrollbar styling */
+        .control-sidebar::-webkit-scrollbar { width: 4px; }
+        .control-sidebar::-webkit-scrollbar-track { background: #0f172a; border-radius: 10px; }
+        .control-sidebar::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+        
+        .card-modern { background: rgba(10, 18, 28, 0.8); border-radius: 20px; padding: 12px; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.05); }
+        .card-modern h3 { font-size: 0.8rem; font-weight: 600; color: #10b981; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; border-left: 3px solid #10b981; padding-left: 10px; }
+        .shape-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; max-height: 100px; overflow-y: auto; padding: 4px; }
+        .shape-grid::-webkit-scrollbar { width: 3px; height: 3px; }
+        .pill-btn { background: rgba(30, 41, 59, 0.9); border: none; color: #e2e8f0; padding: 5px 10px; border-radius: 40px; font-size: 0.65rem; font-weight: 500; cursor: pointer; transition: 0.15s; display: inline-flex; align-items: center; gap: 5px; }
+        .pill-btn i { font-size: 0.65rem; }
         .pill-btn.active { background: #10b981; color: #0f172a; box-shadow: 0 2px 8px rgba(16,185,129,0.4); }
-        .input-modern { background: #0f172a; border: 1px solid #334155; border-radius: 14px; padding: 8px 12px; color: white; font-size: 0.75rem; width: 100%; }
-        .coord-flex { display: flex; gap: 8px; margin-top: 6px; }
-        .btn-primary { background: linear-gradient(95deg, #10b981, #059669); border: none; width: 100%; padding: 10px; border-radius: 40px; font-weight: 700; color: white; margin-top: 8px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+        .input-modern { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 6px 10px; color: white; font-size: 0.7rem; width: 100%; }
+        .coord-flex { display: flex; gap: 6px; margin-top: 6px; }
+        .btn-primary { background: linear-gradient(95deg, #10b981, #059669); border: none; width: 100%; padding: 8px; border-radius: 40px; font-weight: 600; color: white; margin-top: 6px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; }
         .btn-secondary { background: #334155; }
-        .mirror-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 8px 0; }
-        .mirror-card { background: #111827; padding: 8px; text-align: center; border-radius: 16px; cursor: pointer; border: 1px solid #2d3a4e; transition: all 0.1s; font-size: 0.7rem; font-weight: 600; }
+        .mirror-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin: 6px 0; }
+        .mirror-card { background: #111827; padding: 6px; text-align: center; border-radius: 14px; cursor: pointer; border: 1px solid #2d3a4e; font-size: 0.65rem; font-weight: 600; }
         .mirror-card.active { border-color: #10b981; background: #10b98120; color: #10b981; }
-        .result-panel { background: #0a0f1c; border-radius: 18px; padding: 12px; margin-top: 6px; }
-        .math-steps { font-family: 'Courier New', monospace; font-size: 0.7rem; line-height: 1.5; color: #cbd5e6; }
-        .result-table-container { background: #0a0f1c; border-radius: 18px; padding: 12px; margin-top: 6px; overflow-x: auto; }
-        .result-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; color: #e2e8f0; }
-        .result-table th, .result-table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #2d3a4e; }
-        .result-table th { color: #10b981; font-weight: 600; background: #0f172a; }
-        .result-table td { font-family: monospace; }
-        .coord-original { color: #10b981; font-weight: bold; }
-        .coord-reflected { color: #f59e0b; font-weight: bold; }
-        .floating-stats { position: absolute; bottom: 16px; left: 16px; right: 16px; background: rgba(0,0,0,0.65); backdrop-filter: blur(12px); border-radius: 20px; padding: 8px 16px; display: flex; justify-content: space-between; font-size: 10px; font-weight: 500; z-index: 10; border: 1px solid rgba(16,185,129,0.4); pointer-events: none; }
-        .stat-badge { display: flex; align-items: center; gap: 8px; color: #cbd5e1; }
-        .legend-marker { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 4px; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
-        @media (max-width: 780px) and (orientation: portrait) {
-            .control-sidebar { width: calc(100% - 32px); max-height: 52%; bottom: 80px; top: auto; right: 16px; left: 16px; }
-            .glass-header { top: 8px; left: 8px; right: 8px; padding: 6px 16px; }
-            .glass-header h1 { font-size: 1rem; }
-            .ar-badge { top: 8px; right: 8px; }
-            .result-table th, .result-table td { font-size: 0.6rem; padding: 6px 4px; }
+        .result-panel { background: #0a0f1c; border-radius: 16px; padding: 10px; margin-top: 6px; }
+        .math-steps { font-size: 0.65rem; line-height: 1.4; color: #cbd5e6; }
+        .result-table-container { background: #0a0f1c; border-radius: 16px; padding: 10px; margin-top: 6px; overflow-x: auto; }
+        .result-table { width: 100%; border-collapse: collapse; font-size: 0.6rem; color: #e2e8f0; }
+        .result-table th, .result-table td { padding: 6px 4px; text-align: left; border-bottom: 1px solid #2d3a4e; }
+        .result-table th { color: #10b981; }
+        .floating-stats { position: absolute; bottom: 16px; left: 16px; right: 16px; background: rgba(0,0,0,0.6); backdrop-filter: blur(12px); border-radius: 20px; padding: 6px 12px; display: flex; justify-content: space-between; font-size: 9px; font-weight: 500; z-index: 10; border: 1px solid rgba(16,185,129,0.4); pointer-events: none; }
+        .stat-badge { display: flex; align-items: center; gap: 6px; color: #cbd5e1; }
+        .legend-marker { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; }
+        
+        @media (max-width: 780px) {
+            .glass-header h1 { font-size: 0.9rem; }
+            .glass-header p { font-size: 0.5rem; }
+            .ar-badge { top: 12px; right: 12px; padding: 4px 10px; font-size: 0.6rem; }
+            .toggle-sidebar-btn { top: 75px; width: 38px; height: 38px; font-size: 1rem; right: 12px; }
+            .control-sidebar { top: 75px; bottom: 70px; right: 12px; width: 340px; padding: 12px; gap: 10px; }
+            .floating-stats { bottom: 12px; left: 12px; right: 12px; font-size: 8px; }
+        }
+        
+        @media (max-width: 480px) {
+            .control-sidebar { width: calc(100% - 24px); right: 12px; }
         }
     </style>
 </head>
@@ -64,19 +106,23 @@
 
     <div class="ui-overlay">
         <div class="glass-header">
-            <h1><i class="fas fa-vr-cardboard"></i> REFLEKSI MASTER AR+ | SEMUA OBJEK TAMPIL</h1>
-            <p>pencerminan 3D realtime | 2D, 3D, & Benda Realistis | Sumbu Dinamis</p>
+            <h1><i class="fas fa-vr-cardboard"></i> REFLEKSI MASTER AR+</h1>
+            <p>pencerminan 3D | Semua Objek Tampil | Geser untuk lihat objek</p>
         </div>
         <div class="ar-badge">
-            <i class="fas fa-camera"></i> AR MODE AKTIF
-            <i class="fas fa-circle" style="color:#10b981; font-size: 8px; margin-left: 4px;"></i>
+            <i class="fas fa-camera"></i> AR MODE
+            <i class="fas fa-circle" style="color:#10b981; font-size: 8px;"></i>
         </div>
+        
+        <button class="toggle-sidebar-btn" id="toggleSidebarBtn">
+            <i class="fas fa-chevron-right"></i>
+        </button>
 
-        <div class="control-sidebar">
+        <div class="control-sidebar" id="controlSidebar">
             <div class="card-modern">
                 <h3><i class="fas fa-shapes"></i> BANGUN DATAR 2D</h3>
                 <div class="shape-grid">
-                    <button data-shape="titik" class="pill-btn"><i class="fas fa-circle-dot"></i> TITIK</button>
+                    <button data-shape="titik" class="pill-btn"><i class="fas fa-circle-dot"></i> Titik</button>
                     <button data-shape="triangle2d" class="pill-btn"><i class="fas fa-triangle"></i> Segitiga</button>
                     <button data-shape="square2d" class="pill-btn"><i class="fas fa-square"></i> Persegi</button>
                     <button data-shape="circle2d" class="pill-btn"><i class="fas fa-circle"></i> Lingkaran</button>
@@ -94,12 +140,10 @@
                     <button data-shape="cube" class="pill-btn active"><i class="fas fa-cube"></i> Kubus</button>
                     <button data-shape="balok" class="pill-btn"><i class="fas fa-cube"></i> Balok</button>
                     <button data-shape="bola" class="pill-btn"><i class="fas fa-futbol"></i> Bola</button>
-                    <button data-shape="prisma" class="pill-btn"><i class="fas fa-chart-line"></i> Prisma Segitiga</button>
-                    <button data-shape="limas" class="pill-btn"><i class="fas fa-chart-pie"></i> Limas Segiempat</button>
+                    <button data-shape="prisma" class="pill-btn"><i class="fas fa-chart-line"></i> Prisma</button>
+                    <button data-shape="limas" class="pill-btn"><i class="fas fa-chart-pie"></i> Limas</button>
                     <button data-shape="kerucut" class="pill-btn"><i class="fas fa-ice-cream"></i> Kerucut</button>
                     <button data-shape="tabung" class="pill-btn"><i class="fas fa-drum"></i> Tabung</button>
-                    <button data-shape="prismaSegi6" class="pill-btn"><i class="fas fa-hexagon"></i> Prisma Segi-6</button>
-                    <button data-shape="limasSegitiga" class="pill-btn"><i class="fas fa-layer-group"></i> Limas Segitiga</button>
                     <button data-shape="octahedron" class="pill-btn"><i class="fas fa-diamond"></i> Oktahedron</button>
                 </div>
             </div>
@@ -110,64 +154,64 @@
                     <button data-shape="kursi" class="pill-btn"><i class="fas fa-chair"></i> Kursi</button>
                     <button data-shape="lemari" class="pill-btn"><i class="fas fa-wardrobe"></i> Lemari</button>
                     <button data-shape="kulkas" class="pill-btn"><i class="fas fa-thermometer-half"></i> Kulkas</button>
-                    <button data-shape="mobil" class="pill-btn"><i class="fas fa-car"></i> Mobil Sederhana</button>
+                    <button data-shape="mobil" class="pill-btn"><i class="fas fa-car"></i> Mobil</button>
                     <button data-shape="tv" class="pill-btn"><i class="fas fa-tv"></i> TV</button>
                     <button data-shape="laptop" class="pill-btn"><i class="fas fa-laptop"></i> Laptop</button>
                     <button data-shape="pohon" class="pill-btn"><i class="fas fa-tree"></i> Pohon</button>
-                    <button data-shape="lampu" class="pill-btn"><i class="fas fa-lightbulb"></i> Lampu Meja</button>
+                    <button data-shape="lampu" class="pill-btn"><i class="fas fa-lightbulb"></i> Lampu</button>
                     <button data-shape="gelas" class="pill-btn"><i class="fas fa-mug-hot"></i> Gelas</button>
                     <button data-shape="roket" class="pill-btn"><i class="fas fa-rocket"></i> Roket</button>
-                    <button data-shape="kue" class="pill-btn"><i class="fas fa-birthday-cake"></i> Kue Lapis</button>
+                    <button data-shape="kue" class="pill-btn"><i class="fas fa-birthday-cake"></i> Kue</button>
                 </div>
             </div>
             <div class="card-modern">
                 <h3><i class="fas fa-sliders-h"></i> Posisi & Dimensi</h3>
                 <div class="coord-flex">
-                    <div style="flex:1"><label style="font-size:0.6rem;">X center</label><input type="number" id="posX" value="2.0" step="0.3" class="input-modern"></div>
-                    <div style="flex:1"><label style="font-size:0.6rem;">Y center</label><input type="number" id="posY" value="1.2" step="0.3" class="input-modern"></div>
+                    <div style="flex:1"><label style="font-size:0.55rem;">X</label><input type="number" id="posX" value="2.0" step="0.3" class="input-modern"></div>
+                    <div style="flex:1"><label style="font-size:0.55rem;">Y</label><input type="number" id="posY" value="1.2" step="0.3" class="input-modern"></div>
                 </div>
                 <div class="coord-flex">
-                    <div style="flex:1"><label style="font-size:0.6rem;">Lebar (W)</label><input type="number" id="sizeW" value="1.6" step="0.2" class="input-modern"></div>
-                    <div style="flex:1"><label style="font-size:0.6rem;">Tinggi (H)</label><input type="number" id="sizeH" value="1.6" step="0.2" class="input-modern"></div>
-                    <div style="flex:1"><label style="font-size:0.6rem;">Kedalaman (D)</label><input type="number" id="sizeD" value="1.6" step="0.2" class="input-modern"></div>
+                    <div style="flex:1"><label style="font-size:0.55rem;">Lebar</label><input type="number" id="sizeW" value="1.6" step="0.2" class="input-modern"></div>
+                    <div style="flex:1"><label style="font-size:0.55rem;">Tinggi</label><input type="number" id="sizeH" value="1.6" step="0.2" class="input-modern"></div>
+                    <div style="flex:1"><label style="font-size:0.55rem;">Kedalaman</label><input type="number" id="sizeD" value="1.6" step="0.2" class="input-modern"></div>
                 </div>
-                <button id="applyObjectBtn" class="btn-primary"><i class="fas fa-check-circle"></i> Terapkan Objek</button>
-                <button id="resetCenterBtn" class="btn-primary btn-secondary" style="background:#334155; margin-top:6px;"><i class="fas fa-undo-alt"></i> Reset Posisi (0,0)</button>
+                <button id="applyObjectBtn" class="btn-primary"><i class="fas fa-check"></i> Terapkan</button>
+                <button id="resetCenterBtn" class="btn-primary btn-secondary" style="background:#334155; margin-top:4px;"><i class="fas fa-undo-alt"></i> Reset Posisi</button>
             </div>
             <div class="card-modern">
                 <h3><i class="fas fa-mirror"></i> Garis Cermin</h3>
                 <div class="mirror-options">
-                    <div data-axis="y" class="mirror-card active"><i class="fas fa-arrows-alt-h"></i> Sumbu Y (x→-x)</div>
-                    <div data-axis="x" class="mirror-card"><i class="fas fa-arrows-alt-v"></i> Sumbu X (y→-y)</div>
-                    <div data-axis="z" class="mirror-card"><i class="fas fa-arrows-alt"></i> Sumbu Z</div>
+                    <div data-axis="y" class="mirror-card active"><i class="fas fa-arrows-alt-h"></i> Sumbu Y</div>
+                    <div data-axis="x" class="mirror-card"><i class="fas fa-arrows-alt-v"></i> Sumbu X</div>
                     <div data-axis="y=x" class="mirror-card"><i class="fas fa-exchange-alt"></i> y = x</div>
                 </div>
-                <div style="background:#0f172a; border-radius:40px; padding:6px; text-align:center; margin:8px 0; font-family:monospace; font-size:0.7rem;" id="formulaLive">(x, y) → (-x, y)</div>
-                <button id="reflectActionBtn" class="btn-primary" style="background:#f59e0b;"><i class="fas fa-bolt"></i> Refleksikan Sekarang</button>
+                <div style="background:#0f172a; border-radius:40px; padding:5px; text-align:center; margin:6px 0; font-family:monospace; font-size:0.7rem;" id="formulaLive">(x, y) → (-x, y)</div>
+                <button id="reflectActionBtn" class="btn-primary" style="background:#f59e0b;"><i class="fas fa-bolt"></i> Refleksikan</button>
             </div>
             <div class="card-modern">
-                <h3><i class="fas fa-chalkboard-user"></i> Hasil & Penyelesaian</h3>
+                <h3><i class="fas fa-chalkboard-user"></i> Hasil</h3>
                 <div class="result-panel">
-                    <div style="font-size:0.7rem; color:#10b981;">Rumus : <span id="rumusDisplay">(x,y) → (-x,y)</span></div>
-                    <div style="font-size:0.9rem; font-weight:bold; margin-top:6px; background:#00000040; padding:6px; border-radius:12px;" id="hasilKoordinat">Belum direfleksi</div>
-                    <div class="math-steps" id="stepByStep">✨ Klik tombol refleksi</div>
+                    <div style="font-size:0.65rem; color:#10b981;">Rumus: <span id="rumusDisplay">(x,y)→(-x,y)</span></div>
+                    <div style="font-size:0.8rem; font-weight:bold; margin-top:5px;" id="hasilKoordinat">Belum direfleksi</div>
+                    <div class="math-steps" id="stepByStep">✨ Klik refleksi</div>
                 </div>
             </div>
             <div class="card-modern">
-                <h3><i class="fas fa-table"></i> TABEL HASIL PENCERMINAN</h3>
+                <h3><i class="fas fa-table"></i> TABEL HASIL</h3>
                 <div class="result-table-container">
                     <table class="result-table">
-                        <thead><tr><th>Objek</th><th>Titik Asli (x, y)</th><th>Garis Cermin</th><th>Bayangan (x', y')</th></tr></thead>
+                        <thead><tr><th>Objek</th><th>Asli (x,y)</th><th>Cermin</th><th>Bayangan</th></tr></thead>
                         <tbody id="tableBody"><tr><td colspan="4" style="text-align:center;">✨ Tekan refleksi</td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
+        
         <div class="floating-stats">
             <div class="stat-badge"><span class="legend-marker" style="background:#10b981;"></span> Objek Asli</div>
             <div class="stat-badge"><span class="legend-marker" style="background:#f59e0b;"></span> Bayangan</div>
             <div class="stat-badge"><span class="legend-marker" style="background:#ff6666;"></span> Sumbu Cermin</div>
-            <div class="stat-badge"><i class="fas fa-ruler"></i> Sumbu X & Y skala dinamis</div>
+            <div class="stat-badge"><i class="fas fa-fingerprint"></i> Geser layar untuk rotasi</div>
         </div>
     </div>
 </div>
@@ -181,6 +225,7 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
+    // Camera AR
     const videoElement = document.getElementById('video-canvas');
     async function startCamera() {
         try { const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }); videoElement.srcObject = stream; await videoElement.play(); } 
@@ -188,20 +233,27 @@
     }
     startCamera();
 
+    // Three.js
     const canvasEl = document.getElementById('three-canvas');
     const container = canvasEl.parentElement;
     const scene = new THREE.Scene();
     scene.background = null;
-    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 500);
-    camera.position.set(6, 4, 7);
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 500);
+    camera.position.set(5, 3.5, 6);
+    camera.lookAt(0, 0, 0);
     const renderer = new THREE.WebGLRenderer({ canvas: canvasEl, alpha: true });
     renderer.setClearColor(0x000000, 0);
     const labelRenderer = new CSS2DRenderer();
     labelRenderer.domElement.style.cssText = 'position:absolute; top:0; left:0; pointer-events:none; z-index:3';
     document.querySelector('.ar-container').appendChild(labelRenderer.domElement);
     const controls = new OrbitControls(camera, canvasEl);
-    controls.enableDamping = true; controls.dampingFactor = 0.06; controls.zoomSpeed = 1.2;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.zoomSpeed = 1.0;
+    controls.rotateSpeed = 1.0;
+    controls.panSpeed = 0.8;
 
+    // State
     let currentShapeKey = 'cube';
     let objCenter = { x: 2.0, y: 1.2, z: 0 };
     let objSize = { w: 1.6, h: 1.6, d: 1.6 };
@@ -209,62 +261,61 @@
     let isReflected = false;
     let reflectedCenter = null;
     let mainMesh = null, reflectedMesh = null, connectorLines = null;
-    let mirrorPlaneObj = null, mirrorLineObj = null;
+    let mirrorLineObj = null;
     let labelsGroup = [];
     let axisLabelsGroup = [];
     const COLOR_PRIMARY = 0x10b981;
     const COLOR_MIRROR = 0xf59e0b;
 
-    function getShapeDisplayName(shape) {
-        const map = { 'titik':'Titik', 'triangle2d':'Segitiga','square2d':'Persegi','circle2d':'Lingkaran','rectangle2d':'Persegi Panjang','trapezoid2d':'Trapesium','pentagon2d':'Segilima','hexagon2d':'Segienam','ellipse2d':'Elips','jajarGenjang':'Jajar Genjang','cube':'Kubus','balok':'Balok','bola':'Bola','prisma':'Prisma Segitiga','limas':'Limas Segiempat','kerucut':'Kerucut','tabung':'Tabung','prismaSegi6':'Prisma Segi-6','limasSegitiga':'Limas Segitiga','octahedron':'Oktahedron','meja':'Meja','kursi':'Kursi','lemari':'Lemari','kulkas':'Kulkas','mobil':'Mobil','tv':'TV','laptop':'Laptop','pohon':'Pohon','lampu':'Lampu','gelas':'Gelas','roket':'Roket','kue':'Kue' };
-        return map[shape] || shape;
-    }
-
-    function buildObject(shape, center, size, isRefl = false) {
-        const col = isRefl ? COLOR_MIRROR : COLOR_PRIMARY;
-        const mat = new THREE.MeshStandardMaterial({ color: col, metalness: 0.6, roughness: 0.3, emissive: isRefl ? 0x5a2a0a : 0x064e3b, emissiveIntensity: 0.1 });
-        const matShiny = new THREE.MeshStandardMaterial({ color: col, metalness: 0.8, roughness: 0.2 });
+    // Function to create objects
+    function createMesh(shape, size, color, isRefl = false) {
+        const mat = new THREE.MeshStandardMaterial({ color: color, metalness: 0.5, roughness: 0.4, emissive: isRefl ? 0x442200 : 0x004422, emissiveIntensity: 0.1 });
         
         switch(shape) {
-            case 'titik': return new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 32), new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 0.5 }));
-            case 'triangle2d': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.2, size.w/1.2, 0.1, 3), mat);
-            case 'square2d': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, 0.1), mat);
-            case 'circle2d': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.5, size.w/1.5, 0.1, 48), mat);
-            case 'rectangle2d': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, 0.1), mat);
-            case 'trapezoid2d': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.3, size.w/1.8, 0.1, 4), mat);
-            case 'pentagon2d': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.3, size.w/1.3, 0.1, 5), mat);
-            case 'hexagon2d': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.3, size.w/1.3, 0.1, 6), mat);
-            case 'ellipse2d': { const geo = new THREE.SphereGeometry(size.w/1.6, 32, 32); geo.scale(1.4, 0.8, 0.1); return new THREE.Mesh(geo, mat); }
-            case 'jajarGenjang': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, 0.1), mat);
+            case 'titik': return new THREE.Mesh(new THREE.SphereGeometry(0.25, 24, 24), mat);
+            case 'triangle2d': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.2, size.w/1.2, 0.08, 3), mat);
+            case 'square2d': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, 0.08), mat);
+            case 'circle2d': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.5, size.w/1.5, 0.08, 48), mat);
+            case 'rectangle2d': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, 0.08), mat);
+            case 'trapezoid2d': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.3, size.w/1.8, 0.08, 4), mat);
+            case 'pentagon2d': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.3, size.w/1.3, 0.08, 5), mat);
+            case 'hexagon2d': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.3, size.w/1.3, 0.08, 6), mat);
+            case 'ellipse2d': { const geo = new THREE.SphereGeometry(size.w/1.6, 32, 32); geo.scale(1.4, 0.8, 0.08); return new THREE.Mesh(geo, mat); }
+            case 'jajarGenjang': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, 0.08), mat);
             case 'cube': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, size.d), mat);
             case 'balok': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, size.d), mat);
-            case 'bola': return new THREE.Mesh(new THREE.SphereGeometry(size.w/1.5, 64, 64), mat);
+            case 'bola': return new THREE.Mesh(new THREE.SphereGeometry(size.w/1.5, 48, 48), mat);
             case 'prisma': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.4, size.w/1.4, size.h, 3), mat);
             case 'limas': return new THREE.Mesh(new THREE.ConeGeometry(size.w/1.4, size.h, 4), mat);
             case 'kerucut': return new THREE.Mesh(new THREE.ConeGeometry(size.w/1.4, size.h, 32), mat);
             case 'tabung': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.5, size.w/1.5, size.h, 32), mat);
-            case 'prismaSegi6': return new THREE.Mesh(new THREE.CylinderGeometry(size.w/1.3, size.w/1.3, size.h, 6), mat);
-            case 'limasSegitiga': return new THREE.Mesh(new THREE.ConeGeometry(size.w/1.4, size.h, 3), mat);
             case 'octahedron': return new THREE.Mesh(new THREE.OctahedronGeometry(size.w/1.3), mat);
-            case 'meja': { const group = new THREE.Group(); const top = new THREE.Mesh(new THREE.BoxGeometry(size.w, 0.2, size.d), mat); top.position.y = size.h/2; group.add(top); const leg = new THREE.Mesh(new THREE.BoxGeometry(0.2, size.h, 0.2), mat); leg.position.set(-size.w/3, 0, -size.d/3); group.add(leg); const leg2 = new THREE.Mesh(new THREE.BoxGeometry(0.2, size.h, 0.2), mat); leg2.position.set(size.w/3, 0, -size.d/3); group.add(leg2); const leg3 = new THREE.Mesh(new THREE.BoxGeometry(0.2, size.h, 0.2), mat); leg3.position.set(-size.w/3, 0, size.d/3); group.add(leg3); const leg4 = new THREE.Mesh(new THREE.BoxGeometry(0.2, size.h, 0.2), mat); leg4.position.set(size.w/3, 0, size.d/3); group.add(leg4); return group; }
-            case 'kursi': { const group = new THREE.Group(); const seat = new THREE.Mesh(new THREE.BoxGeometry(size.w, 0.15, size.d), mat); seat.position.y = size.h*0.3; group.add(seat); const back = new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h*0.5, 0.1), mat); back.position.set(0, size.h*0.6, -size.d/2); group.add(back); for(let i=-1; i<=1; i+=2) { const leg = new THREE.Mesh(new THREE.BoxGeometry(0.12, size.h*0.3, 0.12), mat); leg.position.set(i*size.w/2.5, 0, i*size.d/2.5); group.add(leg); } return group; }
-            case 'lemari': { const group = new THREE.Group(); const body = new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, size.d/1.5), mat); group.add(body); const door = new THREE.Mesh(new THREE.BoxGeometry(size.w*0.4, size.h*0.7, 0.05), new THREE.MeshStandardMaterial({ color: 0x8B5A2B })); door.position.set(-size.w/4, size.h*0.2, size.d/2.5); group.add(door); return group; }
-            case 'kulkas': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, size.d/1.4), new THREE.MeshStandardMaterial({ color: 0xE8E8E8, metalness: 0.7 }));
-            case 'mobil': { const group = new THREE.Group(); const body = new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h*0.4, size.d), mat); body.position.y = size.h*0.2; group.add(body); const roof = new THREE.Mesh(new THREE.BoxGeometry(size.w*0.6, size.h*0.3, size.d*0.7), mat); roof.position.y = size.h*0.5; group.add(roof); return group; }
-            case 'tv': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, 0.1), new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.9 }));
-            case 'laptop': { const group = new THREE.Group(); const base = new THREE.Mesh(new THREE.BoxGeometry(size.w, 0.1, size.d), mat); base.position.y = 0; group.add(base); const screen = new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h*0.7, 0.05), new THREE.MeshStandardMaterial({ color: 0x2c3e50 })); screen.position.set(0, size.h*0.4, -size.d/2.5); screen.rotation.x = -0.8; group.add(screen); return group; }
-            case 'pohon': { const group = new THREE.Group(); const trunk = new THREE.Mesh(new THREE.CylinderGeometry(size.w*0.3, size.w*0.4, size.h*0.6, 8), new THREE.MeshStandardMaterial({ color: 0x8B5A2B })); trunk.position.y = 0; group.add(trunk); const foliage = new THREE.Mesh(new THREE.ConeGeometry(size.w*0.6, size.h*0.6, 8), mat); foliage.position.y = size.h*0.5; group.add(foliage); return group; }
-            case 'lampu': { const group = new THREE.Group(); const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.15, size.h*0.8, 8), mat); group.add(pole); const shade = new THREE.Mesh(new THREE.ConeGeometry(size.w*0.5, size.h*0.3, 8), matShiny); shade.position.y = size.h*0.5; group.add(shade); return group; }
-            case 'gelas': return new THREE.Mesh(new THREE.CylinderGeometry(size.w*0.5, size.w*0.35, size.h, 32), new THREE.MeshStandardMaterial({ color: 0x88CCFF, metalness: 0.9, transparent: true, opacity: 0.7 }));
-            case 'roket': { const group = new THREE.Group(); const body = new THREE.Mesh(new THREE.ConeGeometry(size.w*0.5, size.h, 16), mat); group.add(body); const top = new THREE.Mesh(new THREE.ConeGeometry(size.w*0.3, size.h*0.3, 16), new THREE.MeshStandardMaterial({ color: 0xff4444 })); top.position.y = size.h*0.6; group.add(top); return group; }
-            case 'kue': { const group = new THREE.Group(); const layer1 = new THREE.Mesh(new THREE.CylinderGeometry(size.w*0.8, size.w*0.8, size.h*0.3, 32), new THREE.MeshStandardMaterial({ color: 0xDEB887 })); layer1.position.y = 0; group.add(layer1); const layer2 = new THREE.Mesh(new THREE.CylinderGeometry(size.w*0.6, size.w*0.6, size.h*0.3, 32), new THREE.MeshStandardMaterial({ color: 0xD2B48C })); layer2.position.y = size.h*0.25; group.add(layer2); return group; }
+            case 'meja': { const g = new THREE.Group(); const top = new THREE.Mesh(new THREE.BoxGeometry(size.w, 0.15, size.d), mat); top.position.y = size.h/2; g.add(top); const leg = new THREE.Mesh(new THREE.BoxGeometry(0.15, size.h, 0.15), mat); leg.position.set(-size.w/3, 0, -size.d/3); g.add(leg); const leg2 = new THREE.Mesh(new THREE.BoxGeometry(0.15, size.h, 0.15), mat); leg2.position.set(size.w/3, 0, size.d/3); g.add(leg2); return g; }
+            case 'kursi': { const g = new THREE.Group(); const seat = new THREE.Mesh(new THREE.BoxGeometry(size.w, 0.12, size.d), mat); seat.position.y = size.h*0.25; g.add(seat); const back = new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h*0.45, 0.08), mat); back.position.set(0, size.h*0.55, -size.d/2); g.add(back); return g; }
+            case 'lemari': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, size.d/1.3), new THREE.MeshStandardMaterial({ color: 0x8B6914 }));
+            case 'kulkas': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, size.d/1.3), new THREE.MeshStandardMaterial({ color: 0xDDDDDD, metalness: 0.7 }));
+            case 'mobil': { const g = new THREE.Group(); const body = new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h*0.35, size.d), mat); body.position.y = size.h*0.2; g.add(body); const roof = new THREE.Mesh(new THREE.BoxGeometry(size.w*0.6, size.h*0.25, size.d*0.7), mat); roof.position.y = size.h*0.45; g.add(roof); return g; }
+            case 'tv': return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, 0.08), new THREE.MeshStandardMaterial({ color: 0x2c3e50, metalness: 0.8 }));
+            case 'laptop': { const g = new THREE.Group(); const base = new THREE.Mesh(new THREE.BoxGeometry(size.w, 0.08, size.d), mat); g.add(base); const screen = new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h*0.6, 0.05), new THREE.MeshStandardMaterial({ color: 0x1a1a2e })); screen.position.set(0, size.h*0.35, -size.d/2.5); screen.rotation.x = -0.7; g.add(screen); return g; }
+            case 'pohon': { const g = new THREE.Group(); const trunk = new THREE.Mesh(new THREE.CylinderGeometry(size.w*0.3, size.w*0.4, size.h*0.5, 6), new THREE.MeshStandardMaterial({ color: 0x8B5A2B })); g.add(trunk); const foliage = new THREE.Mesh(new THREE.ConeGeometry(size.w*0.55, size.h*0.55, 8), mat); foliage.position.y = size.h*0.4; g.add(foliage); return g; }
+            case 'lampu': { const g = new THREE.Group(); const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.12, size.h*0.7, 6), mat); g.add(pole); const shade = new THREE.Mesh(new THREE.ConeGeometry(size.w*0.45, size.h*0.25, 8), mat); shade.position.y = size.h*0.45; g.add(shade); return g; }
+            case 'gelas': return new THREE.Mesh(new THREE.CylinderGeometry(size.w*0.45, size.w*0.3, size.h, 24), new THREE.MeshStandardMaterial({ color: 0x88AACC, metalness: 0.8, transparent: true, opacity: 0.7 }));
+            case 'roket': { const g = new THREE.Group(); const body = new THREE.Mesh(new THREE.ConeGeometry(size.w*0.45, size.h, 16), mat); g.add(body); const tip = new THREE.Mesh(new THREE.ConeGeometry(size.w*0.25, size.h*0.25, 12), new THREE.MeshStandardMaterial({ color: 0xff6666 })); tip.position.y = size.h*0.55; g.add(tip); return g; }
+            case 'kue': { const g = new THREE.Group(); const layer1 = new THREE.Mesh(new THREE.CylinderGeometry(size.w*0.7, size.w*0.7, size.h*0.3, 24), new THREE.MeshStandardMaterial({ color: 0xD2B48C })); g.add(layer1); const layer2 = new THREE.Mesh(new THREE.CylinderGeometry(size.w*0.55, size.w*0.55, size.h*0.25, 24), new THREE.MeshStandardMaterial({ color: 0xDEB887 })); layer2.position.y = size.h*0.25; g.add(layer2); return g; }
             default: return new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, size.d), mat);
         }
     }
 
+    function buildObject(shape, center, size, isRefl) {
+        const obj = createMesh(shape, size, isRefl ? COLOR_MIRROR : COLOR_PRIMARY, isRefl);
+        if(obj.isGroup) obj.position.set(center.x, center.y, center.z);
+        else obj.position.set(center.x, center.y, center.z);
+        return obj;
+    }
+
     function clearSceneObjects() {
-        if(mainMesh) { if(mainMesh.isGroup) mainMesh.children.forEach(c => scene.remove(c)); scene.remove(mainMesh); }
-        if(reflectedMesh) { if(reflectedMesh.isGroup) reflectedMesh.children.forEach(c => scene.remove(c)); scene.remove(reflectedMesh); }
+        if(mainMesh) { try { scene.remove(mainMesh); if(mainMesh.isGroup) mainMesh.children.forEach(c => scene.remove(c)); } catch(e){} }
+        if(reflectedMesh) { try { scene.remove(reflectedMesh); if(reflectedMesh.isGroup) reflectedMesh.children.forEach(c => scene.remove(c)); } catch(e){} }
         if(connectorLines) scene.remove(connectorLines);
         labelsGroup.forEach(lbl => scene.remove(lbl));
         labelsGroup = [];
@@ -272,17 +323,17 @@
     
     function addLabels() {
         const divA = document.createElement('div');
-        divA.textContent = `📍 Asli (${objCenter.x.toFixed(2)}, ${objCenter.y.toFixed(2)})`;
-        divA.style.cssText = 'background:#0f172a; color:#10b981; font-size:10px; padding:2px 12px; border-radius:30px; border-left:3px solid #10b981; backdrop-filter: blur(2px);';
+        divA.textContent = `📍 (${objCenter.x.toFixed(2)}, ${objCenter.y.toFixed(2)})`;
+        divA.style.cssText = 'background:#0f172a; color:#10b981; font-size:9px; padding:2px 10px; border-radius:20px; border-left:2px solid #10b981;';
         const labelA = new CSS2DObject(divA);
-        labelA.position.set(objCenter.x, objCenter.y + 0.9, 0);
+        labelA.position.set(objCenter.x, objCenter.y + 0.8, 0);
         scene.add(labelA); labelsGroup.push(labelA);
         if(isReflected && reflectedCenter) {
             const divB = document.createElement('div');
-            divB.textContent = `✨ A' (${reflectedCenter.x.toFixed(2)}, ${reflectedCenter.y.toFixed(2)})`;
-            divB.style.cssText = 'background:#0f172a; color:#f59e0b; font-size:10px; padding:2px 12px; border-radius:30px; border-left:3px solid #f59e0b; backdrop-filter: blur(2px);';
+            divB.textContent = `✨ (${reflectedCenter.x.toFixed(2)}, ${reflectedCenter.y.toFixed(2)})`;
+            divB.style.cssText = 'background:#0f172a; color:#f59e0b; font-size:9px; padding:2px 10px; border-radius:20px; border-left:2px solid #f59e0b;';
             const labelB = new CSS2DObject(divB);
-            labelB.position.set(reflectedCenter.x, reflectedCenter.y + 0.9, 0);
+            labelB.position.set(reflectedCenter.x, reflectedCenter.y + 0.8, 0);
             scene.add(labelB); labelsGroup.push(labelB);
         }
     }
@@ -290,12 +341,12 @@
     function updateVisuals() {
         clearSceneObjects();
         mainMesh = buildObject(currentShapeKey, objCenter, objSize, false);
-        if(mainMesh) { if(mainMesh.isGroup) mainMesh.position.set(objCenter.x, objCenter.y, objCenter.z); else mainMesh.position.set(objCenter.x, objCenter.y, objCenter.z); scene.add(mainMesh); }
+        scene.add(mainMesh);
         if(isReflected && reflectedCenter) {
             reflectedMesh = buildObject(currentShapeKey, reflectedCenter, objSize, true);
-            if(reflectedMesh) { if(reflectedMesh.isGroup) reflectedMesh.position.set(reflectedCenter.x, reflectedCenter.y, reflectedCenter.z); else reflectedMesh.position.set(reflectedCenter.x, reflectedCenter.y, reflectedCenter.z); scene.add(reflectedMesh); }
+            scene.add(reflectedMesh);
             const pts = [new THREE.Vector3(objCenter.x, objCenter.y, 0), new THREE.Vector3(reflectedCenter.x, reflectedCenter.y, 0)];
-            connectorLines = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: 0xffaa66, transparent: true, opacity: 0.6 }));
+            connectorLines = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: 0xffaa66, transparent: true, opacity: 0.5 }));
             scene.add(connectorLines);
         }
         addLabels();
@@ -306,25 +357,15 @@
     function getReflection(point, axis) {
         if(axis === 'y') return { x: -point.x, y: point.y, z: point.z };
         if(axis === 'x') return { x: point.x, y: -point.y, z: point.z };
-        if(axis === 'z') return { x: point.x, y: point.y, z: -point.z };
         if(axis === 'y=x') return { x: point.y, y: point.x, z: point.z };
         return point;
     }
 
     function updateMirrorDisplay(axis) {
-        if(mirrorPlaneObj) scene.remove(mirrorPlaneObj);
         if(mirrorLineObj) scene.remove(mirrorLineObj);
-        const planeGeo = new THREE.PlaneGeometry(14, 12);
-        const matMirror = new THREE.MeshStandardMaterial({ color: 0x4488ff, side: THREE.DoubleSide, transparent: true, opacity: 0.08 });
-        mirrorPlaneObj = new THREE.Mesh(planeGeo, matMirror);
-        if(axis === 'y') mirrorPlaneObj.rotation.y = Math.PI/2;
-        else if(axis === 'x') mirrorPlaneObj.rotation.x = Math.PI/2;
-        else if(axis === 'z') mirrorPlaneObj.rotation.z = Math.PI/2;
-        else if(axis === 'y=x') mirrorPlaneObj.rotation.y = Math.PI/4;
-        scene.add(mirrorPlaneObj);
         const lineMat = new THREE.LineBasicMaterial({ color: 0xff6666 });
-        const pointsLine = [new THREE.Vector3(0, -6, 0), new THREE.Vector3(0, 6, 0)];
-        mirrorLineObj = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pointsLine), lineMat);
+        const points = axis === 'y=x' ? [new THREE.Vector3(-5, -5, 0), new THREE.Vector3(5, 5, 0)] : [new THREE.Vector3(0, -6, 0), new THREE.Vector3(0, 6, 0)];
+        mirrorLineObj = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), lineMat);
         scene.add(mirrorLineObj);
     }
 
@@ -333,82 +374,39 @@
         axisLabelsGroup = [];
         let maxAbs = Math.max(Math.abs(objCenter.x), Math.abs(objCenter.y));
         if (reflectedCenter) maxAbs = Math.max(maxAbs, Math.abs(reflectedCenter.x), Math.abs(reflectedCenter.y));
-        let range = Math.max(4, Math.ceil(maxAbs) + 2);
-        let start = -range;
-        let end = range;
+        let range = Math.max(3.5, Math.ceil(maxAbs) + 1.5);
         
-        const existingLines = scene.children.filter(c => c.userData && c.userData.isDynamicAxis);
-        existingLines.forEach(line => scene.remove(line));
+        const existing = scene.children.filter(c => c.userData?.isDynamicAxis);
+        existing.forEach(line => scene.remove(line));
         
-        const xAxisLineMat = new THREE.LineBasicMaterial({ color: 0xff6666 });
-        const xPoints = [new THREE.Vector3(start, 0, 0), new THREE.Vector3(end, 0, 0)];
-        const xLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(xPoints), xAxisLineMat);
+        const xMat = new THREE.LineBasicMaterial({ color: 0xff6666 });
+        const xLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-range, 0, 0), new THREE.Vector3(range, 0, 0)]), xMat);
         xLine.userData = { isDynamicAxis: true };
         scene.add(xLine);
         
-        const yAxisLineMat = new THREE.LineBasicMaterial({ color: 0x66ff66 });
-        const yPoints = [new THREE.Vector3(0, start, 0), new THREE.Vector3(0, end, 0)];
-        const yLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(yPoints), yAxisLineMat);
+        const yMat = new THREE.LineBasicMaterial({ color: 0x66ff66 });
+        const yLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, -range, 0), new THREE.Vector3(0, range, 0)]), yMat);
         yLine.userData = { isDynamicAxis: true };
         scene.add(yLine);
         
-        const arrowX = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.45, 8), new THREE.MeshStandardMaterial({ color: 0xff8888 }));
-        arrowX.position.set(end + 0.2, 0, 0);
-        arrowX.rotation.z = -Math.PI/2;
-        arrowX.userData = { isDynamicAxis: true };
-        scene.add(arrowX);
-        const arrowY = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.45, 8), new THREE.MeshStandardMaterial({ color: 0x88ff88 }));
-        arrowY.position.set(0, end + 0.2, 0);
-        arrowY.userData = { isDynamicAxis: true };
-        scene.add(arrowY);
-        
-        for (let i = Math.floor(start); i <= Math.floor(end); i++) {
+        for (let i = Math.floor(-range); i <= Math.floor(range); i++) {
             if (i === 0) continue;
             const divX = document.createElement('div');
             divX.textContent = `${i}`;
-            divX.style.cssText = 'color:#ffaa88; font-size:11px; font-weight:bold; background:rgba(0,0,0,0.5); padding:0px 5px; border-radius:12px;';
+            divX.style.cssText = 'color:#ff9988; font-size:9px; background:#00000080; padding:0px 4px; border-radius:10px;';
             const labelX = new CSS2DObject(divX);
-            labelX.position.set(i, -0.3, 0);
+            labelX.position.set(i, -0.25, 0);
             scene.add(labelX);
             axisLabelsGroup.push(labelX);
             
             const divY = document.createElement('div');
             divY.textContent = `${i}`;
-            divY.style.cssText = 'color:#aaffaa; font-size:11px; font-weight:bold; background:rgba(0,0,0,0.5); padding:0px 5px; border-radius:12px;';
+            divY.style.cssText = 'color:#88ff88; font-size:9px; background:#00000080; padding:0px 4px; border-radius:10px;';
             const labelY = new CSS2DObject(divY);
-            labelY.position.set(-0.3, i, 0);
+            labelY.position.set(-0.25, i, 0);
             scene.add(labelY);
             axisLabelsGroup.push(labelY);
         }
-        const zeroDiv = document.createElement('div');
-        zeroDiv.textContent = '0';
-        zeroDiv.style.cssText = 'color:white; font-size:12px; font-weight:bold; background:rgba(0,0,0,0.7); padding:0px 6px; border-radius:20px;';
-        const label0 = new CSS2DObject(zeroDiv);
-        label0.position.set(0, -0.3, 0);
-        scene.add(label0);
-        axisLabelsGroup.push(label0);
-        
-        const xLetter = new CSS2DObject(Object.assign(document.createElement('div'), { textContent: 'X', style: { color:'#ff8888', fontSize:'16px', fontWeight:'bold', textShadow:'1px 1px 0 black' } }));
-        xLetter.position.set(end + 0.6, 0.2, 0);
-        scene.add(xLetter); axisLabelsGroup.push(xLetter);
-        const yLetter = new CSS2DObject(Object.assign(document.createElement('div'), { textContent: 'Y', style: { color:'#88ff88', fontSize:'16px', fontWeight:'bold', textShadow:'1px 1px 0 black' } }));
-        yLetter.position.set(0.2, end + 0.6, 0);
-        scene.add(yLetter); axisLabelsGroup.push(yLetter);
-    }
-
-    function updateResultTable() {
-        const tbody = document.getElementById('tableBody');
-        if (!isReflected || !reflectedCenter) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">✨ Tekan refleksi</td></tr>'; return; }
-        let axisName = '', rumus = '';
-        if (currentAxis === 'y') { axisName = 'Sumbu Y'; rumus = '(-x, y)'; }
-        else if (currentAxis === 'x') { axisName = 'Sumbu X'; rumus = '(x, -y)'; }
-        else if (currentAxis === 'z') { axisName = 'Sumbu Z'; rumus = '(x, y, -z)'; }
-        else if (currentAxis === 'y=x') { axisName = 'Garis y=x'; rumus = '(y, x)'; }
-        tbody.innerHTML = `<tr><td style="font-weight:700;">${getShapeDisplayName(currentShapeKey)}</td>
-            <td class="coord-original">(${objCenter.x.toFixed(2)}, ${objCenter.y.toFixed(2)})</td>
-            <td>${axisName}<br><span style="font-size:0.6rem; color:#10b981;">${rumus}</span></td>
-            <td class="coord-reflected">(${reflectedCenter.x.toFixed(2)}, ${reflectedCenter.y.toFixed(2)})</td>
-        </tr><tr style="background:#0f172a40;"><td colspan="4" style="font-size:0.65rem; text-align:center;">📐 Transformasi: ${currentAxis === 'y' ? 'x → -x' : currentAxis === 'x' ? 'y → -y' : currentAxis === 'y=x' ? 'tukar x dan y' : 'z → -z'}</td></tr>`;
     }
 
     function processReflection() {
@@ -416,64 +414,84 @@
         isReflected = true;
         updateVisuals();
         updateDynamicAxes();
-        const formulas = { 'y': '(x, y) → (-x, y)', 'x': '(x, y) → (x, -y)', 'z': '(x, y, z) → (x, y, -z)', 'y=x': '(x, y) → (y, x)' };
-        const rumusTxt = formulas[currentAxis];
-        document.getElementById('rumusDisplay').innerHTML = rumusTxt;
-        document.getElementById('formulaLive').innerHTML = rumusTxt;
+        const formulas = { 'y': '(x,y)→(-x,y)', 'x': '(x,y)→(x,-y)', 'y=x': '(x,y)→(y,x)' };
+        document.getElementById('rumusDisplay').innerHTML = formulas[currentAxis];
+        document.getElementById('formulaLive').innerHTML = formulas[currentAxis];
         document.getElementById('hasilKoordinat').innerHTML = `(${objCenter.x.toFixed(2)}, ${objCenter.y.toFixed(2)}) → (${reflectedCenter.x.toFixed(2)}, ${reflectedCenter.y.toFixed(2)})`;
-        let axisName = currentAxis === 'y' ? 'Sumbu Y' : currentAxis === 'x' ? 'Sumbu X' : currentAxis === 'z' ? 'Sumbu Z' : 'Garis y=x';
-        document.getElementById('stepByStep').innerHTML = `<div><strong>📘 Langkah:</strong></div><div>1. Pusat (${objCenter.x.toFixed(2)}, ${objCenter.y.toFixed(2)})</div><div>2. Cermin ${axisName} | ${rumusTxt}</div><div>3. Bayangan (${reflectedCenter.x.toFixed(2)}, ${reflectedCenter.y.toFixed(2)})</div><div>✅ Selesai</div>`;
-        updateResultTable();
+        document.getElementById('stepByStep').innerHTML = `📘 Cermin ${currentAxis === 'y' ? 'Sumbu Y' : currentAxis === 'x' ? 'Sumbu X' : 'y=x'} | ${formulas[currentAxis]} ✅`;
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = `<tr><td>${currentShapeKey}</td><td>(${objCenter.x.toFixed(2)}, ${objCenter.y.toFixed(2)})</td><td>${currentAxis === 'y' ? 'Sumbu Y' : currentAxis === 'x' ? 'Sumbu X' : 'y=x'}</td><td>(${reflectedCenter.x.toFixed(2)}, ${reflectedCenter.y.toFixed(2)})</td></tr>`;
     }
 
     function applyObjectParams() {
-        objCenter.x = parseFloat(document.getElementById('posX').value);
-        objCenter.y = parseFloat(document.getElementById('posY').value);
-        objSize.w = parseFloat(document.getElementById('sizeW').value);
-        objSize.h = parseFloat(document.getElementById('sizeH').value);
-        objSize.d = parseFloat(document.getElementById('sizeD').value);
-        if(isNaN(objSize.w)) objSize.w=1.2; if(isNaN(objSize.h)) objSize.h=1.2; if(isNaN(objSize.d)) objSize.d=1.2;
-        if(isNaN(objCenter.x)) objCenter.x=0; if(isNaN(objCenter.y)) objCenter.y=0;
-        isReflected = false; reflectedCenter = null;
+        objCenter.x = parseFloat(document.getElementById('posX').value) || 0;
+        objCenter.y = parseFloat(document.getElementById('posY').value) || 0;
+        objSize.w = parseFloat(document.getElementById('sizeW').value) || 1.2;
+        objSize.h = parseFloat(document.getElementById('sizeH').value) || 1.2;
+        objSize.d = parseFloat(document.getElementById('sizeD').value) || 1.2;
+        isReflected = false;
+        reflectedCenter = null;
         updateVisuals();
-        updateDynamicAxes(); 
-        document.getElementById('hasilKoordinat').innerHTML = 'Belum direfleksi';
-        document.getElementById('stepByStep').innerHTML = '✨ Klik tombol refleksi';
-        updateResultTable();
-    }
-
-    function resetCenter() { 
-        objCenter.x = 0; objCenter.y = 0; 
-        document.getElementById('posX').value = 0; document.getElementById('posY').value = 0; 
-        isReflected = false; reflectedCenter = null; 
-        updateVisuals(); 
         updateDynamicAxes();
-        updateResultTable(); 
+        document.getElementById('hasilKoordinat').innerHTML = 'Belum direfleksi';
+        document.getElementById('stepByStep').innerHTML = '✨ Klik refleksi';
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" style="text-align:center;">✨ Tekan refleksi</td></tr>';
     }
 
-    function initSceneHelpers() {
-        const grid = new THREE.GridHelper(22, 24, 0x88aaff, 0x335588);
-        grid.position.y = -1.5;
-        grid.material.transparent = true; grid.material.opacity = 0.35;
+    function resetCenter() {
+        objCenter.x = 0; objCenter.y = 0;
+        document.getElementById('posX').value = 0;
+        document.getElementById('posY').value = 0;
+        isReflected = false;
+        reflectedCenter = null;
+        updateVisuals();
+        updateDynamicAxes();
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" style="text-align:center;">✨ Tekan refleksi</td></tr>';
+    }
+
+    // Toggle sidebar
+    let sidebarCollapsed = false;
+    const toggleBtn = document.getElementById('toggleSidebarBtn');
+    const sidebar = document.getElementById('controlSidebar');
+    toggleBtn.addEventListener('click', () => {
+        sidebarCollapsed = !sidebarCollapsed;
+        if(sidebarCollapsed) {
+            sidebar.classList.add('collapsed');
+            toggleBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        } else {
+            sidebar.classList.remove('collapsed');
+            toggleBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        }
+    });
+
+    // Init
+    function initScene() {
+        const grid = new THREE.GridHelper(18, 20, 0x88aaff, 0x335588);
+        grid.position.y = -1.2;
+        grid.material.transparent = true;
+        grid.material.opacity = 0.3;
         scene.add(grid);
         updateDynamicAxes();
-        const ambient = new THREE.AmbientLight(0x40406c, 0.7);
+        const ambient = new THREE.AmbientLight(0x40406c, 0.6);
         scene.add(ambient);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 1.3);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
         dirLight.position.set(3, 5, 2);
         scene.add(dirLight);
-        const fill = new THREE.PointLight(0x4466cc, 0.5);
-        fill.position.set(-2, 1, 3);
-        scene.add(fill);
+        const backLight = new THREE.PointLight(0x4466cc, 0.4);
+        backLight.position.set(-2, 1, 3);
+        scene.add(backLight);
         updateMirrorDisplay(currentAxis);
     }
-    
+
     function resizeHandler() {
         const w = container.clientWidth, h = container.clientHeight;
-        renderer.setSize(w, h); labelRenderer.setSize(w, h);
-        camera.aspect = w / h; camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+        labelRenderer.setSize(w, h);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
     }
-    
+
+    // Event listeners
     document.querySelectorAll('.pill-btn').forEach(btn => btn.addEventListener('click', () => {
         document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -484,7 +502,7 @@
         document.querySelectorAll('.mirror-card').forEach(c => c.classList.remove('active'));
         card.classList.add('active');
         currentAxis = card.dataset.axis;
-        const fm = { 'y': '(x, y) → (-x, y)', 'x': '(x, y) → (x, -y)', 'z': '(x, y, z) → (x, y, -z)', 'y=x': '(x, y) → (y, x)' };
+        const fm = { 'y': '(x,y)→(-x,y)', 'x': '(x,y)→(x,-y)', 'y=x': '(x,y)→(y,x)' };
         document.getElementById('formulaLive').innerHTML = fm[currentAxis];
         updateMirrorDisplay(currentAxis);
         if(isReflected) processReflection();
@@ -494,7 +512,7 @@
     document.getElementById('reflectActionBtn').addEventListener('click', processReflection);
     window.addEventListener('resize', resizeHandler);
     resizeHandler();
-    initSceneHelpers();
+    initScene();
     applyObjectParams();
     
     function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); labelRenderer.render(scene, camera); }
